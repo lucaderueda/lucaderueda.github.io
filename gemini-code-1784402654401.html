@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luca de Rueda Oostrik - Aerospace & Mechanical Engineering</title>
+    <!-- Import Modern Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Deep Tech Color Palette (Dark Mode - Default) */
+            --bg-color: #050810;
+            --surface-color: #0d121f;
+            --surface-light: #161e30;
+            --primary-accent: #00f0ff;
+            --secondary-accent: #7000ff;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+            
+            /* Card Hover Effects Variables */
+            --card-grad-start: var(--secondary-accent);
+            --card-grad-end: var(--primary-accent);
+            --card-hover-border: rgba(0, 240, 255, 0.3);
+            --card-hover-shadow: rgba(0, 240, 255, 0.15);
+            
+            --font-body: 'Inter', sans-serif;
+            --font-heading: 'Space Grotesk', sans-serif;
+            
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Light Mode Overrides */
+        body.light-mode {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --surface-light: #f0f9ff;
+            --primary-accent: #0284c7; 
+            --secondary-accent: #7e22ce; 
+            --text-main: #0f172a;
+            --text-muted: #334155; 
+            --border-color: rgba(0, 0, 0, 0.1);
+            
+            --card-grad-start: #d8b4fe; 
+            --card-grad-end: #7dd3fc;
+            --card-hover-border: rgba(2, 132, 199, 0.3);
+            --card-hover-shadow: rgba(2, 132, 199, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-main);
+            background-color: var(--bg-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Technical Background Grid */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: linear-gradient(var(--border-color) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
+            transition: background-image 0.4s ease;
+        }
+
+        /* Glassmorphism Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            background: rgba(5, 8, 16, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        body.light-mode nav {
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--primary-accent);
+            text-shadow: 0 0 10px rgba(var(--primary-accent), 0.5);
+        }
+
+        /* Active Navigation State */
+        nav a.active {
+            color: var(--primary-accent);
+            font-size: 1.1rem;
+            transform: translateY(-2px);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-main);
+            transition: var(--transition);
+            margin-left: 1rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--surface-light);
+            border-color: var(--primary-accent);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* SVG Icon Toggling */
+        .sun-icon { display: block; }
+        .moon-icon { display: none; }
+        
+        body.light-mode .sun-icon { display: none; }
+        body.light-mode .moon-icon { display: block; }
+
+        /* Hero Section */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        /* Glowing Orb Behind Header */
+        header::after {
+            content: '';
+            position: absolute;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(112,0,255,0.15) 0%, rgba(0,240,255,0.05) 50%, transparent 70%);
+            z-index: -1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            filter: blur(50px);
+            animation: pulseOrb 8s ease-in-out infinite alternate;
+            transition: background 0.4s ease;
+        }
+
+        body.light-mode header::after {
+            background: radial-gradient(circle, rgba(126, 34, 206, 0.15) 0%, rgba(2, 132, 199, 0.05) 50%, transparent 70%);
+        }
+
+        @keyframes pulseOrb {
+            0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+        }
+
+        /* Typing Effect Styles */
+        .typing-container {
+            margin-bottom: 1.5rem;
+            min-height: calc(clamp(3rem, 6vw, 5.5rem) * 1.1); /* Prevent layout shift */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        header h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            line-height: 1.1;
+            background: linear-gradient(135deg, var(--text-main) 0%, var(--primary-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            border-right: 4px solid var(--primary-accent);
+            transform: translateX(4px); 
+            animation: blink-caret 0.8s step-end infinite;
+            transition: border-right-color 0.3s ease, background 0.4s ease;
+        }
+
+        header h1.typing-complete {
+            border-right-color: transparent;
+            animation: none;
+        }
+
+        @keyframes blink-caret {
+            from, to { border-right-color: transparent; }
+            50% { border-right-color: var(--primary-accent); }
+        }
+
+        /* Emphasized Degree Badges */
+        .degree-showcase {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .degree-badge {
+            background: rgba(0, 240, 255, 0.05);
+            border: 2px solid var(--primary-accent);
+            padding: 0.8rem 1.8rem;
+            border-radius: 8px;
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-main);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        body.light-mode .degree-badge {
+            background: rgba(2, 132, 199, 0.05);
+            box-shadow: 0 0 15px rgba(2, 132, 199, 0.15);
+        }
+
+        .degree-date {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 400;
+            opacity: 0.8;
+            margin-top: 0.3rem;
+            text-transform: none;
+            letter-spacing: normal;
+            color: var(--primary-accent);
+        }
+
+        .degree-badge.honours {
+            border-color: var(--secondary-accent);
+            box-shadow: 0 0 20px rgba(112, 0, 255, 0.25);
+            background: rgba(112, 0, 255, 0.05);
+        }
+
+        body.light-mode .degree-badge.honours {
+            background: rgba(126, 34, 206, 0.05);
+            box-shadow: 0 0 15px rgba(126, 34, 206, 0.15);
+        }
+
+        .degree-badge.honours .degree-date {
+            color: #d8b4fe; 
+            filter: brightness(1);
+        }
+
+        body.light-mode .degree-badge.honours .degree-date {
+            color: var(--secondary-accent);
+        }
+
+        .degree-badge:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
+            background: var(--surface-light);
+        }
+
+        .degree-badge.honours:hover {
+            box-shadow: 0 0 30px rgba(112, 0, 255, 0.45);
+        }
+
+        header h2 {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: var(--text-muted);
+            max-width: 800px;
+            font-weight: 400;
+            margin-bottom: 2.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .contact-info a {
+            color: var(--primary-accent);
+            text-decoration: none;
+            border: 1px solid var(--primary-accent);
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .contact-info a:hover {
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .contact-info span {
+            display: flex;
+            align-items: center;
+            padding: 0.6rem 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            background: var(--surface-color);
+            transition: background 0.4s ease;
+        }
+
+        /* Layout Containers */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        section {
+            margin-bottom: 6rem;
+            scroll-margin-top: 100px;
+        }
+
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h3 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--text-main);
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: color 0.4s ease;
+        }
+
+        .title-muted {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        h3::after {
+            content: '';
+            height: 1px;
+            flex-grow: 1;
+            background: linear-gradient(90deg, var(--primary-accent), transparent);
+        }
+
+        /* High-Tech Cards */
+        .card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--card-grad-start), var(--card-grad-end));
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .card.active:hover {
+            transform: translateY(-5px);
+            border-color: var(--card-hover-border);
+            box-shadow: 0 10px 30px -10px var(--card-hover-shadow);
+            background: var(--surface-light);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card h4 {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            transition: color 0.4s ease;
+        }
+
+        .card .meta {
+            color: var(--primary-accent);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-heading);
+            letter-spacing: 0.5px;
+        }
+
+        /* Lists & Text */
+        ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--primary-accent);
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Tags for Skills */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1.5rem;
+        }
+
+        .skills-tag {
+            background: rgba(112, 0, 255, 0.1);
+            color: var(--text-main);
+            border: 1px solid rgba(112, 0, 255, 0.3);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-family: var(--font-heading);
+            transition: var(--transition);
+        }
+
+        .card:hover .skills-tag {
+            border-color: var(--primary-accent);
+            background: rgba(0, 240, 255, 0.05);
+            color: var(--primary-accent);
+        }
+
+        /* Grids */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+        }
+        
+        .grid-list-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            border-left: 2px solid var(--border-color);
+            padding-left: 2rem;
+            margin-left: 1rem;
+        }
+        
+        .timeline .card {
+            margin-left: 1rem;
+        }
+
+        .timeline .card::after {
+            content: '';
+            position: absolute;
+            left: -3.5rem;
+            top: 2.5rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--bg-color);
+            border: 2px solid var(--primary-accent);
+            transition: var(--transition);
+        }
+        
+        .timeline .card:hover::after {
+            background: var(--primary-accent);
+            box-shadow: 0 0 15px var(--primary-accent);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-family: var(--font-heading);
+            background: var(--surface-color);
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        .footer-contacts {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-body);
+        }
+
+        .footer-contacts a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-contacts a:hover {
+            color: var(--text-main);
+        }
+
+        .footer-contacts span {
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.8rem 1rem;
+                gap: 1.2rem;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                justify-content: flex-start;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            nav::-webkit-scrollbar {
+                display: none;
+            }
+            nav a {
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
+            .theme-toggle {
+                margin-left: auto;
+                flex-shrink: 0;
+            }
+            header {
+                padding-top: 5rem;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .grid-list-2 {
+                grid-template-columns: 1fr;
+            }
+            .timeline {
+                border-left: none;
+                padding-left: 0;
+                margin-left: 0;
+            }
+            .timeline .card::after {
+                display: none;
+            }
+            .timeline .card {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body id="top">
+
+    <nav id="navbar">
+        <a href="#top" class="nav-link active" data-section="top">Home</a>
+        <a href="#about" class="nav-link" data-section="about">About</a>
+        <a href="#experience" class="nav-link" data-section="experience">Experience</a>
+        <a href="#projects" class="nav-link" data-section="projects">Projects & Research</a>
+        <a href="#courses" class="nav-link" data-section="courses">Courses</a>
+        <a href="#skills" class="nav-link" data-section="skills">Skills & Honors</a>
+        
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+            <!-- Sun Icon (Shown in Dark Mode) -->
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <!-- Moon Icon (Shown in Light Mode) -->
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+    </nav>
+
+    <header>
+        <div class="typing-container">
+            <h1 id="typed-name"></h1>
+        </div>
+        
+        <!-- Emphasized Degrees -->
+        <div class="degree-showcase">
+            <span class="degree-badge">BSc Mechanical Engineering <span class="degree-date">UTwente | Jul 2028 | Grade 8.5</span></span>
+            <span class="degree-badge honours">Honours Degree Mathematics <span class="degree-date">UTwente | Jul 2027 | Signals, Quantum & ML</span></span>
+        </div>
+
+        <h2>DesignLab | SolidWorks CSWA | Robotics & Aerospace</h2>
+        
+        <div class="contact-info">
+            <span>Enschede, NL</span>
+            <span>+31 658958118</span>
+            <a href="mailto:luca.derueda@gmail.com">luca.derueda@gmail.com</a>
+            <a href="https://www.linkedin.com/in/lucaderueda" target="_blank">LinkedIn</a>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- About Section -->
+        <section id="about">
+            <h3 class="reveal"><span>About <span class="title-muted">// Terminal Output</span></span></h3>
+            <div class="card reveal">
+                <p>I am a Mechanical Engineering student at the University of Twente with a deep interest in complex Mathematics, Physics, Robotics and Aerospace. As a Dream Teamer in DesignLab I get my hands dirty with 3D printing and electronics, and help projects and ideas come to life. I am driven by high-impact engineering, I have conducted research in Mars Radiation Shielding and Microplastic Extraction with Ferrofluids, for which I have recieved multiple National Prizes.</p>
+                <p>I currently help develop my study association's hovercraft and organise educational sessions for Honours students, and I am part of WOT Technology for Development and Space Society Twente. I was selected for the ISTF forum about water scarcity challenges, grew my knowledge with the NL Space Summer School, and placed 2nd in CanSat for designing a satellite to find life on Jupiter's moons. If you find my profile interesting, we can connect or you can send me a message at luca.derueda@gmail.com, I'm always down to a chat with interesting people or to discuss part-time work / internship opportunities!</p>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience">
+            <h3 class="reveal"><span>Experience <span class="title-muted">// Operational History</span></span></h3>
+            
+            <div class="timeline">
+                <div class="card reveal">
+                    <h4>DreamTeamer (Research, Prototyping & Education Assistant)</h4>
+                    <div class="meta">DesignLab University of Twente | April 2026 - Present | Enschede</div>
+                    <ul>
+                        <li>Supporting students and researchers on interdisciplinary projects, bridging the gap between ideas and prototypes through workshops, technical consulting, tool facilitation, and safety assistance.</li>
+                    </ul>
+                </div>
+
+                <div class="card reveal">
+                    <h4>Hovercraft Engineer & Lead CAD Engineer</h4>
+                    <div class="meta">W.S.G. Isaac Newton | Nov 2025 - Present | Enschede</div>
+                    <ul>
+                        <li>Hovercraft Engineer (May 2026 - Present): Designing and developing an air-cushion vehicle within the PropulCie committee, focusing on structural design, steering, electronics and overall vehicle architecture for mixed-terrain operation</li>
+                        <li>Lead CAD Engineer - SolidWorks (Nov 2025 - Jul 2026): Leading the design and manufacturing of a mechanicaly self-sorting connect four game prototype with metal and wood as part of the "First Year's Construction" committee.</li>
+                    </ul>
+                </div>
+
+                <div class="card reveal">
+                    <h4>Symposium Committee Member</h4>
+                    <div class="meta">Honours Association Ockham | March 2026 - Present | Enschede</div>
+                    <ul>
+                        <li>Contrubuting to the organization of academic lectures and interdisciplinary activities for honours students.</li>
+                        <li>Organised a lecture with the Surgical Robotics research group.</li>
+                    </ul>
+                </div>
+
+                <div class="card reveal">
+                    <h4>Founder & Private Chef</h4>
+                    <div class="meta">Niklafoods | June 2023 - August 2025 | Madrid</div>
+                    <ul>
+                        <li>Co-founded and operated a private gourmet dining business in Madrid, managing client communication, logistics, planning, budgeting, and execution in a fast-paced entrepreneurial environment.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <h3 class="reveal"><span>Projects & Research <span class="title-muted">// System Architecture</span></span></h3>
+            
+            <div class="grid-2">
+                <div class="card reveal">
+                    <h4>"Microplastic Extraction with Ferrofluids" Research</h4>
+                    <div class="meta">Awarded 3 national research awards and invitation to ISTF 2026</div>
+                    <ul>
+                        <li>This project addresses the pressing issue of microplastic contamination in water by exploring an innovative extraction method using ferrofluids.</li>
+                        <li>Microplastics, generated from the degradation of larger plastics, pose significant risks to human health and the environment.</li>
+                        <li>Ferrofluids have been found to effectively remove microplastics from water, with the highest extraction efficiencies reaching upwards of 95%.</li>
+                        <li>The research involved preparing water samples with different microplastics, synthesizing ferrofluids with various oil-to-magnetite ratios, and analysing extraction efficiency using spectrophotometry.</li>
+                        <li>Results confirmed the viability of this method, with better results than traditional extraction methods.</li>
+                        <li>Additionally, the study includes the successful creation of a biodegradable biopolymer as an alternative to conventional plastics, further contributing to environmental sustainability, and the creation of a low-cost spectrophotometer.</li>
+                    </ul>
+                    <div class="skills-container">
+                        <span class="skills-tag">R&D</span>
+                        <span class="skills-tag">Spectrophotometry</span>
+                    </div>
+                </div>
+
+                <div class="card reveal">
+                    <h4>ESA CanSat - Finding Life on Jupiter's moon</h4>
+                    <div class="meta">2nd Regional Prize in Madrid (2024)</div>
+                    <ul>
+                        <li>Team lead and technical lead of the ESA CanSat Challenge.</li>
+                        <li>Developed a can-sized prototype sattelite and launched it with a rocket sponsored by ESA.</li>
+                        <li>Outer shell was designed and 3D printed, and parachute was designed with aerodynamic calculations and testing to ensure descent at 8 m/s.</li>
+                        <li>Data transmission was done with an APC 220 Module for data transmission, a Yaggi antenna made with aluminum tubes and 3d printed connectors to transmit at 446.3 MHz, and Coolterm to process the data.</li>
+                        <li>Base sensors were added to an Arduino UNO board, including a BMP 280 (temperature, pressure, altitude), GPS NEO-6.</li>
+                        <li>For our scientific mission, we utilized a MQ4 (methane), SD1SD (UV radiation) and HMC5883L (Magnetosphere intensity).</li>
+                    </ul>
+                    <div class="skills-container">
+                        <span class="skills-tag">Electronics</span>
+                        <span class="skills-tag">Systems Engineering</span>
+                        <span class="skills-tag">Arduino</span>
+                    </div>
+                </div>
+
+                <div class="card reveal">
+                    <h4>NL Space Summer School 2026</h4>
+                    <div class="meta">SRON Nebula Xplorer, Workshops & Lectures</div>
+                    <ul>
+                        <li>Developed a prototype outreach platform for SRON's Nebula Xplorer during the selective NL Space Summer School.</li>
+                        <li>Working within a high-paced, interdisciplinary team, we developed our vision through rapid prototyping.</li>
+                        <li>The programme was supported by direct immersion in the European aerospace sector.</li>
+                        <li>I participated in technical tours at leading organizations, including ESA, Airbus, SRON, and TNO, alongside expert workshops ranging from composites, drones and robotics to space law and business risk matrices.</li>
+                    </ul>
+                    <div class="skills-container">
+                        <span class="skills-tag">Space Systems</span>
+                        <span class="skills-tag">Rapid Prototyping</span>
+                    </div>
+                </div>
+
+                <div class="card reveal">
+                    <h4>UT BSc Mechanical Engineering Projects</h4>
+                    <div class="meta">Core Curriculum Development</div>
+                    <ul>
+                        <li>Production of a leaf shredder: I focused on CAD modelling, designing the power train, design for manufacturing and assembly, and production with mills, lathes, lasercutting and welding.</li>
+                        <li>Design of a Biomass powerplant: I focused on the layout of the power plant, full MATLAB modelling and multivariable optimization of thermodynamic values.</li>
+                        <li>Concept of an IMAX camera dolly: I focused on conceptualizing the structure and modelling the forces to do a Finite Element Model Analysis with MATLAB code.</li>
+                        <li>Structure optimization with spatial, stress and deflection constraints: obtained lowest weight of ~260 students, using FEA in MATLAB.</li>
+                    </ul>
+                    <div class="skills-container">
+                        <span class="skills-tag">MATLAB</span>
+                        <span class="skills-tag">CAD Modeling</span>
+                        <span class="skills-tag">FEA</span>
+                    </div>
+                </div>
+                
+                <div class="card reveal">
+                    <h4>European & Spanish Space Settlement Design Competition</h4>
+                    <div class="meta">Team Lead 2025</div>
+                    <ul>
+                        <li>Selected to participate in the Spanish Space Design Competition, a fast-paced engineering challenge focused on designing a conceptual space settlement.</li>
+                        <li>I was chosen to lead a multidisciplinary team of 30 participants and coordinated the development, subsystem integration, and presentation of the final design.</li>
+                        <li>Qualified for the European competition phase.</li>
+                    </ul>
+                    <div class="skills-container">
+                        <span class="skills-tag">Team Leadership</span>
+                        <span class="skills-tag">Space Architecture</span>
+                    </div>
+                </div>
+
+                <div class="card reveal">
+                    <h4>Literary Review Radiation Shielding on Mars</h4>
+                    <div class="meta">High School R&D&I 2023 Runner-up</div>
+                    <ul>
+                        <li>Took part in a research competition about "Radiation and its effects on matter" presenting the different alternatives currently being researched for travel, occupation and terraforming of the planet Mars. (Programa Investiga I+D+i)</li>
+                    </ul>
+                    <div class="skills-container">
+                        <span class="skills-tag">Research Skills</span>
+                        <span class="skills-tag">Radiation Physics</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Courses Section -->
+        <section id="courses">
+            <h3 class="reveal"><span>Courses <span class="title-muted">// Specialized Training</span></span></h3>
+            <div class="card reveal">
+                <ul class="grid-list-2">
+                    <li><strong>DesignLab University</strong><br>Topology Optimization, Design for 3D Printing</li>
+                    <li><strong>ESAC Youth Space Summer School</strong><br>Design of a Lunar Settlement</li>
+                    <li><strong>MIT Global Teaching Labs</strong><br>Machine Learning for Recycling</li>
+                    <li><strong>The Entrepreneurial Experience</strong><br>Buissness Workshops & Lectures</li>
+                    <li><strong>Utwente CUBE</strong><br>CNC, Welding, Milling, Turning, Laser Cutting</li>
+                    <li><strong>WOT Technology for Development</strong><br>Windmill Electronics, Rope Pump Construction, Welding</li>
+                    <li><strong>Local Municipality</strong><br>Conflict Resolution and Mediation (2 years)</li>
+                    <li><strong>Comunidad Madrid + CREACIM (PEAC 2018-2024)</strong><br>Educational Enrichment Programme for Gifted Students</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills">
+            <h3 class="reveal"><span>Skills & Honors <span class="title-muted">// Credentials</span></span></h3>
+            <div class="grid-3">
+                <div class="card reveal">
+                    <h4>Core Competencies</h4>
+                    <ul>
+                        <li><strong>Top Skills:</strong> Systems Engineering, Design for Manufacturing, Research and Development, Computer-Aided Design, Rapid Prototyping, Mathematical Modeling, Robotics, Space</li>
+                        <li><strong>Languages:</strong> English (Full Professional), Dutch (Native/Bilingual), Spanish (Native/Bilingual)</li>
+                    </ul>
+                </div>
+                
+                <div class="card reveal">
+                    <h4>Certifications</h4>
+                    <ul>
+                        <li>Certified SOLIDWORKS Associate (CSWA)</li>
+                        <li>Creathon Innovation & Entrepreneurship</li>
+                        <li>BHV/ERO Emergency Response</li>
+                        <li>Onshape Hands-On Test Drive</li>
+                        <li>Certificate Advanced English CEFR C2</li>
+                    </ul>
+                </div>
+
+                <div class="card reveal">
+                    <h4>Honors & Awards</h4>
+                    <ul>
+                        <li>2nd Regional Prize ESA CanSat</li>
+                        <li>2nd National Science Innovation Award "Don Bosco"</li>
+                        <li>Selection European Space Design Competition</li>
+                        <li>Accésit in "National young researchers contest"</li>
+                        <li>Honour mention St. Louis University Research Contest</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="footer-contacts">
+            <span>Enschede, NL</span>
+            <span>|</span>
+            <span>+31 658958118</span>
+            <span>|</span>
+            <a href="mailto:luca.derueda@gmail.com">luca.derueda@gmail.com</a>
+            <span>|</span>
+            <a href="https://www.linkedin.com/in/lucaderueda" target="_blank">LinkedIn</a>
+        </div>
+        <p>&copy; 2026 Luca de Rueda Oostrik | Powered by High-Impact Engineering</p>
+    </footer>
+
+    <!-- Animation Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme Toggle Logic
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+
+            // Check local storage for saved theme preference
+            if (localStorage.getItem('theme') === 'light') {
+                body.classList.add('light-mode');
+            }
+
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+            });
+
+            // 1. Faster Typing Animation for Name
+            const nameElement = document.getElementById('typed-name');
+            const nameText = "Luca de Rueda Oostrik";
+            let charIndex = 0;
+            
+            function typeWriter() {
+                if (charIndex < nameText.length) {
+                    nameElement.textContent += nameText.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeWriter, 35); // Decreased timeout for faster typing
+                } else {
+                    // Stop blinking cursor 3 seconds after typing completes
+                    setTimeout(() => {
+                        nameElement.classList.add('typing-complete');
+                    }, 3000);
+                }
+            }
+            
+            // Start typing after a short initial delay
+            setTimeout(typeWriter, 150);
+
+            // 2. Subtle Scroll Reveal Intersection Observer
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                root: null,
+                threshold: 0.05, // Triggers as soon as a tiny 5% fraction is visible
+                rootMargin: "0px" // Exact viewport edge
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Ensure it only animates once
+                    }
+                });
+            }, revealOptions);
+
+            reveals.forEach(reveal => {
+                revealObserver.observe(reveal);
+            });
+
+            // 3. ScrollSpy Logic for Navigation
+            window.addEventListener('scroll', () => {
+                let current = "";
+                const sections = document.querySelectorAll("section, header");
+                
+                sections.forEach((section) => {
+                    const sectionTop = section.offsetTop;
+                    // Trigger section update dynamically based on view height
+                    if (pageYOffset >= sectionTop - 150) {
+                        current = section.getAttribute("id") || "top";
+                    }
+                });
+
+                document.querySelectorAll(".nav-link").forEach((a) => {
+                    a.classList.remove("active");
+                    if (a.getAttribute("data-section") === current) {
+                        a.classList.add("active");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
